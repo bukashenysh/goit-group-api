@@ -2,50 +2,71 @@ import './sass/main.scss';
 import axios from 'axios';
 
 const API_KEY = '410621b9cfc5cc5268eeae574da75634';
-const BASE_URL = 'https://api.themoviedb.org/3/';
+const BASE_URL = 'https://api.themoviedb.org/3/'
 
-const axInstance = axios.create({
-  baseURL: BASE_URL,
-  params: {
-    api_key: API_KEY,
-  }
-});
-
-async function fetchMoviesBySearch(query, page, language, type = 'movie' ) {
-  const url = `search/${type}`;
-  const response = await axInstance.get(url, { params: { query, language, page } });
-  return response.data;
+async function fetchMoviesBySearch(urlForSearch, searchValue, localization, pageNumber) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+      query: searchValue,
+      page: pageNumber,
+    }
+  });
+  return await axResponse.get(urlForSearch);
 };
 
-async function fetchMoviesByID(id, language) {
-  const url = `movie/${id}`;
-  const response = await axInstance.get(url, { params: {language}});
-  return response.data;
+async function fetchMoviesByID(urlWithId, localization) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+    }
+  });
+  return await axResponse.get(urlWithId);
 };
 
-async function fetchTrendingMovies(page, type = 'movie', period = 'day', language) {
-  const url = `trending/${type}/${period}`;
-  const response = await axInstance.get(url, { params: {page, language}});
-  return response.data;
+async function fetchTrendingMovies(urlTrending, localization, pageNumber) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+      page: pageNumber,
+    }
+  });
+  return await axResponse.get(urlTrending);
 };
 
-async function genresList(type = 'movie', language) {
-  const url = `genre/${type}/list`;
-  const response = await axInstance.get(url, { params: {language}});
-  return response.data;
+async function genresList(urlWithGenres, localization) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+    }
+  });
+  return await axResponse.get(urlWithGenres);
 };
 
-async function languageList() {
-  const url = `configuration/languages`;
-  const response = await axInstance.get(url);
-  return response.data;
+async function languageList(urlLanguages) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+    }
+  });
+  return await axResponse.get(urlLanguages);
 };
 
-fetchMoviesBySearch('spider man').then(data => console.log(data));
-fetchMoviesByID(634649).then(data => console.log(data));
-fetchTrendingMovies().then(data => console.log(data));
-genresList().then(data => console.log(data.genres));
-languageList().then(data => console.log(data));
+
+fetchMoviesBySearch('search/movie', 'spider man', 'en-US', 3)
+fetchMoviesByID('movie/634649', 'en-US');
+fetchTrendingMovies('trending/movie/day', 'en-US', 2);
+genresList('genre/movie/list', 'en-US');
+languageList('configuration/languages');
 
 // https://image.tmdb.org/t/p/w500/dKdcyyHUR5WTMnrbPdYN5y9xPVp.jpg
 
