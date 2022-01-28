@@ -17,7 +17,7 @@ async function fetchMoviesBySearch(query, page, language, type = 'movie' ) {
   return response.data;
 };
 
-async function fetchMoviesByID(id, language) {
+async function fetchMoviesById(id, language) {
   const url = `movie/${id}`;
   const response = await axInstance.get(url, { params: {language}});
   return response.data;
@@ -42,7 +42,7 @@ async function languageList() {
 };
 
 fetchMoviesBySearch('spider man').then(data => console.log(data));
-fetchMoviesByID(634649).then(data => console.log(data));
+fetchMoviesById(634649).then(data => console.log(data));
 fetchTrendingMovies().then(data => console.log(data));
 genresList().then(data => console.log(data.genres));
 languageList().then(data => console.log(data));
