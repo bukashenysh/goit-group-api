@@ -1,37 +1,60 @@
 import './sass/main.scss';
+import axios from 'axios';
 
-  function fetchMoviesBySearch(searchValue) {
-    const API_KEY = '410621b9cfc5cc5268eeae574da75634';
-    // const BASE_URL = 'https://api.themoviedb.org/3/search/movie?api_key='
+const API_KEY = '410621b9cfc5cc5268eeae574da75634';
+const BASE_URL = 'https://api.themoviedb.org/3/'
 
-    return fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchValue}&page=1`)
-      .then(res => res.json())
-      .then(data => console.log(data.results[0]))
+async function fetchMoviesBySearch(url, searchValue, localization, pageNumber) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+      query: searchValue,
+      page: pageNumber,
+    }
+  });
+  return await axResponse.get(url);
 };
 
-  function fetchMoviesByID(idValue) {
-    const API_KEY = '410621b9cfc5cc5268eeae574da75634';
-    // const BASE_URL = 'https://api.themoviedb.org/3/search/movie?api_key='
-
-    return fetch(`https://api.themoviedb.org/3/movie/${idValue}?api_key=${API_KEY}`)
-      .then(res => res.json())
-      .then(data => console.log(data))
+async function fetchMoviesByID(urlWithId, localization) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+    }
+  });
+  return await axResponse.get(urlWithId);
 };
 
-  function fetchTrendingMovies() {
-    const API_KEY = '410621b9cfc5cc5268eeae574da75634';
-    // const BASE_URL = 'https://api.themoviedb.org/3/search/movie?api_key='
-
-    return fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}&language=de-DE`)
-      .then(res => res.json())
-      .then(data => console.log(data))
+async function fetchTrendingMovies(url, localization, pageNumber) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+      page: pageNumber,
+    }
+  });
+  return await axResponse.get(url);
 };
 
-fetchMoviesBySearch('spider man: no way home');
-fetchMoviesByID('634649');
-fetchTrendingMovies();
+async function genresList(url, localization) {
+  const axResponse = axios.create({
+    baseURL: BASE_URL,
+    params: {
+      api_key: API_KEY,
+      language: localization,
+    }
+  });
+  return await axResponse.get(url);
+};
 
-// https://api.themoviedb.org/3/list/${genre_ids}?api_key=${API_KEY}&language=en-US
-// https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US
+fetchMoviesBySearch('search/movie', 'spider man', 'en-US', 3)
+fetchMoviesByID('movie/634649', 'en-US');
+fetchTrendingMovies('trending/movie/day', 'en-US', 2);
+genresList('genre/movie/list', 'en-US');
 
-// https://api.themoviedb.org/3/configuration/languages?api_key=${API_KEY}
+// https://api.themoviedb.org/3/configuration/languages?api_key=${API_KEY};
+// https://image.tmdb.org/t/p/w500/dKdcyyHUR5WTMnrbPdYN5y9xPVp.jpg

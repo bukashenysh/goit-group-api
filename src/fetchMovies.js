@@ -1,62 +1,40 @@
-// function fetchCountries(name) {
-//   return fetch(`https://restcountries.com/v3.1/name/${name}?fields=name,capital,population,flags,languages`,)
-//     .then(response => response.json())
-//     .catch(error => console.log(error));
-// }
-// export default class ServiceApi {
-//   constructor() {
-//     this.searchQuery = '';
-//     this.page = 1;
-//   }
+// <<  реализация через Fetch >>
 
 
-// <<------>>
-//   async fetchImages() {
-//     const axios = require('axios').default;
-//     const options = {
-//       method: 'get',
-//       url: 'https://pixabay.com/api/',
-//       params: {
-//         key: '25359275-764cc4a5f322ad48333636f40',
-//         q: this.searchQuery,
-//         image_type: 'photo',
-//         per_page: 40,
-//         page: this.page,
-//         orientation: 'horizontal',
-//         safesearch: true,
-//       },
-//     };
-
-//     const serchResult = await axios(options);
-//     this.page += 1;
-//     return serchResult.data;
-//   }
-//   resetPage() {
-//     this.page = 1;
-//    }
-//   get query() {
-//     return this.searchQuery;
-//   }
-//   set query(newQuery) {
-//     this.searchQuery = newQuery;
-//   }
-// }
+const API_KEY = '410621b9cfc5cc5268eeae574da75634';
+const BASE_URL = 'https://api.themoviedb.org/3/'
 
 
-// <<----->>
-  function fetchMovies() {
-    const API_KEY = '410621b9cfc5cc5268eeae574da75634';
-    const BASE_URL = 'https://api.themoviedb.org/3/movie/550?api_key='
+function fetchMoviesBySearch(searchValue) {
 
-    return fetch(`${BASE_URL}${API_KEY}`)
-      .then(res => res.json())
-      .then(data => console.log)
-  }
-fetchMovies();
+  return fetch(`${BASE_URL}search/movie?api_key=${API_KEY}&query=${searchValue}&language=en-US`)
+    .then(res => res.json())
+    .then(data => console.log(data))
+};
 
-      //       .then(data =>{
-      //   this.page += 1;
-      //   return data;
-      // });
-      // }
-      
+function fetchMoviesByID(idValue) {
+
+  return fetch(`${BASE_URL}movie/${idValue}?api_key=${API_KEY}&language=en-US`)
+    .then(res => res.json())
+    .then(data => console.log(data))
+};
+
+function fetchTrendingMovies() {
+
+  return fetch(`${BASE_URL}trending/movie/day?api_key=${API_KEY}&language=en-US`)
+    .then(res => res.json())
+    .then(data => console.log(data))
+};
+
+function genresList() {
+
+  return fetch(`${BASE_URL}genre/movie/list?api_key=${API_KEY}&language=en-US`)
+    .then(res => res.json())
+    .then(data => console.log(data.genres))
+};
+
+
+fetchMoviesBySearch('spider man');
+fetchMoviesByID('634649');
+fetchTrendingMovies();
+genresList();
