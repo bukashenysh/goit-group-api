@@ -17,8 +17,8 @@ async function fetchMoviesBySearch(query, page, language, type = 'movie' ) {
   return response.data;
 };
 
-async function fetchMoviesById(id, language) {
-  const url = `movie/${id}`;
+async function fetchMoviesById(id, type = 'movie', language) {
+  const url = `${type}/${id}`;
   const response = await axInstance.get(url, { params: {language}});
   return response.data;
 };
@@ -60,7 +60,7 @@ languageList().then(data => console.log(data));
 
 // 2. функция fetchMoviesByID дает объект где нам надо забрать {poster_path, original_title, overview, vote_avarage, vote_counts,
 // popularity, title, genres(или genres.id так как мы все равно будем реализовывать замену id на название)};
-// аргументами для функции являются url = "movie/${id = число}"("movie" можно заменить на "tv", они разные), localization;
+// аргументами для функции являются "id = число", "type"(по умолчанию "movie" можно заменить на "tv"), "language = en-US";
 
 // 3. функция fetchTrendingMovies дает объект {page, results, total_pages, total_results}, 
 // для пагинации мы используем { page, total_pages },
