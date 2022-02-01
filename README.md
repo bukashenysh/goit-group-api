@@ -1,6 +1,4 @@
-// https://image.tmdb.org/t/p/w500/dKdcyyHUR5WTMnrbPdYN5y9xPVp.jpg
-
-// Explanation:
+// https://image.tmdb.org/t/p/w500/dKdcyyHUR5WTMnrbPdYN5y9xPVp.jpg // Explanation:
 
 // чтоб начать работу, в консоли устанавливаем npm instal axios, копируем 2 - 12 строки с
 переменными и экспортом axios // и копируем функцию, которая Вас интересует, на 44-48 строчках вызов

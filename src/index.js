@@ -1,48 +1,136 @@
-import './sass/main.scss';
-import axios from 'axios';
+import ServiceApi from './newFile';
 
-const API_KEY = '410621b9cfc5cc5268eeae574da75634';
-const BASE_URL = 'https://api.themoviedb.org/3/';
+const api = new ServiceApi();
+// api.getGenresList('uk');
+// api.getGenresList('en-US');
+console.log(api);
 
-const axInstance = axios.create({
-  baseURL: BASE_URL,
-  params: {
-    api_key: API_KEY,
-  }
-});
+// import './sass/main.scss';
+// import axios from 'axios';
 
-async function fetchMoviesBySearch(query, page, language, type = 'movie' ) {
-  const url = `search/${type}`;
-  const response = await axInstance.get(url, { params: { query, language, page } });
-  return response.data;
-};
+// const API_KEY = '410621b9cfc5cc5268eeae574da75634';
+// const BASE_URL = 'https://api.themoviedb.org/3/';
 
-async function fetchMoviesById(id, type = 'movie', language) {
-  const url = `${type}/${id}`;
-  const response = await axInstance.get(url, { params: {language}});
-  return response.data;
-};
+// const refs = {
+//   btnOne: document.querySelector('.btn1'),
+//   btnThree: document.querySelector('.btn3'),
+//   btnSeven: document.querySelector('.btn7'),
+// }
 
-async function fetchTrendingMovies(page, type = 'movie', period = 'day', language) {
-  const url = `trending/${type}/${period}`;
-  const response = await axInstance.get(url, { params: {page, language}});
-  return response.data;
-};
+// // refs.btnOne.addEventListener('click', () => {
+// //   console.clear()
+// //   api.stranica = 1
+// //   api.fetchTrendingMovies().then(data => {
+// //     data.map(({ id, title, vote_average, poster_path, genre_ids, release_date, overview, vote_count }) => {
+// //       console.log(id);
+// //       console.log(title);
+// //       console.log(genre_ids);
+// //       console.log(`https://image.tmdb.org/t/p/w500${poster_path}`);
+// //       console.log(release_date.slice(0, 4));
+// //       console.log(overview);
+// //       console.log(vote_average);
+// //       console.log(vote_count);
+// //     }
+// //   )})
+// // })
 
-async function genresList(type = 'movie', language) {
-  const url = `genre/${type}/list`;
-  const response = await axInstance.get(url, { params: {language}});
-  return response.data;
-};
+// // refs.btnThree.addEventListener('click', () => {
+// //     console.clear()
+// //   api.stranica = 3
+// // api.fetchTrendingMovies().then(data => {
+// //   data.results.map(({ id, title, vote_average, poster_path, genre_ids, release_date, overview, vote_count }) => {
+// //       console.log(id);
+// //       console.log(title);
+// //       console.log(genre_ids);
+// //       console.log(`https://image.tmdb.org/t/p/w500${poster_path}`);
+// //       console.log(release_date.slice(0, 4));
+// //       console.log(overview);
+// //       console.log(vote_average);
+// //       console.log(vote_count);
+// //     }
+// //   )})
+// // })
 
-async function languageList() {
-  const url = `configuration/languages`;
-  const response = await axInstance.get(url);
-  return response.data;
-};
+// // refs.btnSeven.addEventListener('click', () => {
+// //   console.clear()
+// //   console.log(api.arrayForGenres)
+// //   console.log(api.arrayForFilms)
+// // })
 
-fetchMoviesBySearch('spider man').then(data => console.log(data));
-fetchMoviesById(634649).then(data => console.log(data));
-fetchTrendingMovies().then(data => console.log(data));
-genresList().then(data => console.log(data.genres));
-languageList().then(data => console.log(data));
+// const axInstance = axios.create({
+//   baseURL: BASE_URL,
+//   params: {
+//     api_key: API_KEY,
+//   }
+// });
+
+// class ServiceApi {
+//  constructor() {
+//   this.searchQuery = '';
+//   this.page = 1;
+//   this.arrayForGenres = [];
+//   this.arrayForFilms = [];
+//   }
+
+// async fetchTrendingMovies(page = this.page, period = 'day', language) {
+// const url = `trending/movie/${period}`;
+//   if (this.arrayForGenres.length === 0) { await this.genresList() }
+//   const response = await axInstance.get(url, { params: { page, language } });
+//   this.arrayForFilms = response.data.results.map(({ id, title, vote_average, poster_path, genre_ids, release_date, overview, vote_count }) => ({ id, title, vote_average, image:`https://image.tmdb.org/t/p/w500${poster_path}`, genre_ids, short_date : release_date.slice(0, 4), overview, vote_count, genres: this.arrayForGenres.filter((genre) => (genre_ids.includes(genre.id))).map(({ name }) => (name)) }));
+// return this.arrayForFilms;
+// }
+
+// async genresList(language) {
+// const url = `genre/movie/list`;
+// const response = await axInstance.get(url, { params: {language}});
+//   this.arrayForGenres = response.data.genres;
+//   return this.arrayForGenres
+// }
+
+// get stranica() {
+// return this.page;
+// }
+
+// set stranica(newPage) {
+// this.page = newPage;
+// }
+
+// resetPage() {
+// this.page = 1;
+// }
+
+// get query() {
+// return this.searchQuery;
+// }
+
+// set query(newQuery) {
+// this.searchQuery = newQuery;
+// }
+
+// };
+
+// const api = new ServiceApi()
+// // api.genresList().then(data => {
+// //   api.this.arrayForSave = data.genres
+// // })
+// // api.genresList()
+// // api.stranica = 6;
+// // const prom = api.fetchTrendingMovies();
+
+// // console.log(api.stranica);
+// // prom.then(data => {console.log(data)})
+
+// // async function genresList(language) {
+// //   const url = `genre/movie/list`;
+// //   const response = await axInstance.get(url, { params: {language}});
+// //   return response.data;
+// // };
+
+// // genresList()
+// async function blabla() {
+//   await api.fetchTrendingMovies()
+//   console.log(api.arrayForGenres)
+//   console.log(api.arrayForFilms)
+// };
+
+// blabla()
