@@ -30,7 +30,7 @@ export default class ServiceApi {
     this.arrayForGenresEn = response.data.genres;
     return this.arrayForGenres;
   }
-  async fetchTrending({ page = 1, period = 'day', language }) {
+  async fetchTrending({ page = 1, period = 'day' }) {
     this.pageNumber = page;
     const url = `trending/movie/${period}`;
     const responseEn = await this.axInstance.get(url, { params: { page: this.page } });
@@ -83,60 +83,72 @@ export default class ServiceApi {
     this.arrayForFilms = [...data];
     return { films: this.arrayForFilms, totalPages: this.totalPages };
   }
-  async fetchMoviesBySearch({ query, page = 1, language }) {
-    this.pageNumber = page;
-    const url = `search/movie`;
-    const responseEn = await this.axInstance.get(url, {
-      params: { query, page: this.page, language },
-    });
-    this.totalPages = responseEn.data.total_pages;
-    const dataEn = responseEn.data.results.map(
-      ({
-        id,
-        popularity,
-        title,
-        vote_average,
-        poster_path,
-        genre_ids,
-        release_date,
-        overview,
-        vote_count,
-      }) => ({
-        id,
-        popularity,
-        titleEn: title,
-        vote: vote_average,
-        imageEn: `https://image.tmdb.org/t/p/w500${poster_path}`,
-        reliseData: release_date.slice(0, 4),
-        aboutEn: overview,
-        votes: vote_count,
-        genreEn: this.arrayForGenresEn
-          .filter(genre => genre_ids.includes(genre.id))
-          .map(({ name }) => name),
-      }),
-    );
-    const responseUk = await this.axInstance.get(url, { params: { query, page, language: 'uk' } });
-    const data = responseUk.data.results.map(
-      ({ title, poster_path, genre_ids, overview }, index) => ({
-        popularity: dataEn[index].popularity,
-        titleEn: dataEn[index].titleEn,
-        id: dataEn[index].id,
-        vote: dataEn[index].vote,
-        imageEn: dataEn[index].imageEn,
-        reliseData: dataEn[index].reliseData,
-        votes: dataEn[index].votes,
-        genreEn: dataEn[index].genreEn,
-        titleUk: title,
-        imageUk: `https://image.tmdb.org/t/p/w500${poster_path}`,
-        aboutUk: overview,
-        aboutEn: dataEn[index].aboutEn,
-        genreUk: this.arrayForGenresUk
-          .filter(genre => genre_ids.includes(genre.id))
-          .map(({ name }) => name),
-      }),
-    );
-    this.arrayForFilms = [...data];
-    return;
+  async fetchMoviesBySearch({ query, page = 1 }) {
+    try {
+      this.pageNumber = page;
+      const url = `search/movie`;
+      const responseEn = await this.axInstance.get(url, {
+        params: { query, page: this.page },
+      });
+      this.totalPages = responseEn.data.total_pages;
+      console.log(responseEn.data.results);
+
+      if (responseEn.data.results.length === 0) {
+        return false;
+      }
+
+      const dataEn = responseEn.data.results.map(
+        ({
+          id,
+          popularity,
+          title,
+          vote_average,
+          poster_path,
+          genre_ids,
+          release_date,
+          overview,
+          vote_count,
+        }) => ({
+          id,
+          popularity,
+          titleEn: title,
+          vote: vote_average,
+          imageEn: `https://image.tmdb.org/t/p/w500${poster_path}`,
+          reliseData: release_date === undefined ? '' : release_date.slice(0, 4),
+          aboutEn: overview,
+          votes: vote_count,
+          genreEn: this.arrayForGenresEn
+            .filter(genre => genre_ids.includes(genre.id))
+            .map(({ name }) => name),
+        }),
+      );
+      const responseUk = await this.axInstance.get(url, {
+        params: { query, page, language: 'uk' },
+      });
+      const data = responseUk.data.results.map(
+        ({ title, poster_path, genre_ids, overview }, index) => ({
+          popularity: dataEn[index].popularity,
+          titleEn: dataEn[index].titleEn,
+          id: dataEn[index].id,
+          vote: dataEn[index].vote,
+          imageEn: dataEn[index].imageEn,
+          reliseData: dataEn[index].reliseData,
+          votes: dataEn[index].votes,
+          genreEn: dataEn[index].genreEn,
+          titleUk: title,
+          imageUk: `https://image.tmdb.org/t/p/w500${poster_path}`,
+          aboutUk: overview,
+          aboutEn: dataEn[index].aboutEn,
+          genreUk: this.arrayForGenresUk
+            .filter(genre => genre_ids.includes(genre.id))
+            .map(({ name }) => name),
+        }),
+      );
+      this.arrayForFilms = [...data];
+      return { films: this.arrayForFilms, totalPages: this.totalPages };
+    } catch (error) {
+      return error;
+    }
   }
   getFilmById(id = null) {
     console.log(id);

@@ -10,7 +10,17 @@ const refs = {
   btnSearch: document.querySelector('.btnSearch'),
   btnSmthng: document.querySelector('.btnSmthng'),
   btnSmthng2: document.querySelector('.btnSmthng2'),
+  form: document.querySelector('.search-form'),
 };
+
+refs.form.addEventListener('submit', e => {
+  e.preventDefault();
+  console.log('hi');
+  const query = e.currentTarget.elements.searchQuery.value;
+  // api.fetchMoviesBySearch({ query });
+  console.log(api.arrayForFilms);
+  console.log(api.fetchMoviesBySearch({ query }));
+});
 
 refs.btnOne.addEventListener('click', () => {
   api.fetchTrending({ page: 1, period: 'day' });
